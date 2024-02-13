@@ -35,18 +35,15 @@ START_SH_PATH="$DIR_PATH/start.sh"
 # Destination directory
 DEST="/usr/local/bin/FumeDev"
 
-if [ ! -e "$DEST" ]; then
-    # Check for root privileges
-    if [ "$(id -u)" != "0" ]; then
-        echo "This script must be run as root" >&2
-        exit 1
-    fi
-
-    # Copy the script to the global path
-    cp "$START_SH_PATH" "$DEST"
-
-    # Make the script executable
-    chmod +x "$DEST"
-
-    echo "Script copied to $DEST"
+if [ "$(id -u)" != "0" ]; then
+    echo "This script must be run as root" >&2
+    exit 1
 fi
+
+# Copy the script to the global path
+cp "$START_SH_PATH" "$DEST"
+
+# Make the script executable
+chmod +x "$DEST"
+
+echo "Script copied to $DEST"
