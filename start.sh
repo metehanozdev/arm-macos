@@ -5,7 +5,7 @@ ORIGINAL_DIR=$(pwd)
 USER_HOME=$(eval echo ~$USER)
 
 # Path to your Python program
-PROGRAM_DIR="$USER_HOME/FumeDev"
+PROGRAM_DIR="$USER_HOME/Applications/FumeDev"
 cd $PROGRAM_DIR
 
 # Check if the program path exists

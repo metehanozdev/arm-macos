@@ -7,7 +7,7 @@ REPO_URL="https://github.com/metehanozdev/arm-macos.git"
 BASE_DIR="FumeDev" 
 
 
-DIR_PATH="$HOME/$BASE_DIR"
+DIR_PATH="$HOME/Applications/$BASE_DIR"
 
 if [ -d "$DIR_PATH" ]; then
 
