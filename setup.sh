@@ -38,37 +38,22 @@ pip3 install -r "$DIR_PATH/requirements.txt"
 # Ensure start.sh is executable
 chmod +x "$START_SH_PATH"
 
-# Function to update PATH in the specified profile
-update_path_in_profile() {
-    PROFILE_PATH=$1
-    if [ -f "$PROFILE_PATH" ]; then
-        if ! grep -q "$DIR_PATH" "$PROFILE_PATH"; then
-            echo "Adding $DIR_PATH to PATH in $PROFILE_PATH"
-            echo "export PATH=\"\$PATH:$DIR_PATH\"" >> "$PROFILE_PATH"
-        else
-            echo "$DIR_PATH is already in PATH in $PROFILE_PATH."
-        fi
-    fi
-}
+SYMLINK_TARGET_DIR="$HOME/bin"
+mkdir -p "$SYMLINK_TARGET_DIR"
 
-# Bash profile paths (could be either depending on the system)
-BASH_PROFILES=("$HOME/.bash_profile" "$HOME/.bashrc")
+# Add $HOME/bin to PATH if it's not already there
+if ! echo "$PATH" | grep -q "$SYMLINK_TARGET_DIR"; then
+    echo "export PATH=\"\$PATH:$SYMLINK_TARGET_DIR\"" >> "$HOME/.bash_profile"
+    echo "export PATH=\"\$PATH:$SYMLINK_TARGET_DIR\"" >> "$HOME/.bashrc"
+    echo "export PATH=\"\$PATH:$SYMLINK_TARGET_DIR\"" >> "$HOME/.zshrc"
+    # Inform the user to restart the shell or source their profile
+    echo "Added $SYMLINK_TARGET_DIR to PATH. Please restart your terminal or source your profile to update PATH."
+fi
 
-# Zsh profile path
-ZSH_PROFILE="$HOME/.zshrc"
+# Create a symbolic link for start.sh in $HOME/bin or another directory in PATH
+SYMLINK_NAME="fumedev"
+SYMLINK_PATH="$SYMLINK_TARGET_DIR/$SYMLINK_NAME"
 
-# Update PATH in Bash profiles
-for PROFILE in "${BASH_PROFILES[@]}"; do
-    update_path_in_profile "$PROFILE"
-done
+ln -sf "$START_SH_PATH" "$SYMLINK_PATH"
 
-# Update PATH in Zsh profile
-update_path_in_profile "$ZSH_PROFILE"
-
-# Create a symbolic link named FumeDev pointing to start.sh
-SYMLINK_NAME="FumeDev"
-ln -sf "$START_SH_PATH" "$DIR_PATH/$SYMLINK_NAME"
-
-echo "Symbolic link created for $SYMLINK_NAME. You can now use '$SYMLINK_NAME' to call the script."
-
-echo "Please restart your terminal or source your profile(s) to update PATH."
+echo "Symbolic link created for $SYMLINK_NAME at $SYMLINK_PATH. You can now use '$SYMLINK_NAME' to call the script."
